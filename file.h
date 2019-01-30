@@ -274,33 +274,6 @@ namespace desalvo_standard_library {
     
     
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     // *********** Begin implementation for file_type::input ***********
     
     /**  Gets a line from the file

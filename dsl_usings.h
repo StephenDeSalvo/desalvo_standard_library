@@ -32,14 +32,14 @@ TODO: example of
 
 namespace dsl = desalvo_standard_library;
 
-using dsl::file_type::output;
+/*using dsl::file_type::output;
 using dsl::file_type::input;
 using dsl::file_type::console;
 
 using dsl::store::bidirectional;
 using dsl::store::forward;
 using dsl::store::random_access;
-
+*/
 
 
 #endif
