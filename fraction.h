@@ -53,10 +53,14 @@ namespace desalvo_standard_library {
         operator double();
         
         // comparison operators, all others are defined below
-        friend bool operator==(const Fraction& lhs, const Fraction& rhs);
-        friend bool operator< (const Fraction& lhs, const Fraction& rhs);
+        template<typename S>
+        friend bool operator==(const Fraction<S>& lhs, const Fraction<S>& rhs);
+
+        template<typename S>
+        friend bool operator< (const Fraction<S>& lhs, const Fraction<S>& rhs);
         
-        friend std::ostream& operator<<(std::ostream& out, const Fraction& frac)
+        template<typename S>
+        friend std::ostream& operator<<(std::ostream& out, const Fraction<S>& frac)
             {
                 return out<<frac.top<<"/"<<frac.bottom;
             };

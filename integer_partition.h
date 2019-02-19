@@ -15,6 +15,7 @@
 #include <random>
 
 #include "table.h"
+#include "combinatorial_structure.h"
 
 namespace desalvo_standard_library {
 

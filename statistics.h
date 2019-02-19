@@ -702,6 +702,8 @@ namespace desalvo_standard_library {
      @endcode
      
      Example 2:
+
+     @code
     
     #include "desalvo/dsl_usings.h" // See documentation for list of keywords included in this file.
     

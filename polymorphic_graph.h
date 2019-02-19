@@ -1,11 +1,17 @@
-//
-//  polymorphic_graph.h
-//  DeSalvo
-//
-//  Created by Stephen DeSalvo on 01/29/19.
-//  Copyright (c) 2019 Stephen DeSalvo. All rights reserved.
-//
+/** @file polymorphic_graph.h
+    @author Stephen DeSalvo
+    @date January, 2019
+    @brief Classes for polymorphic graph using lots of pointers.  
 
+This class is a very intuitive way to think of a graph.  It uses a lot of pointers, class inheritance
+and polymorphism, so if you plan to do very computationally intensive operations on the graph you might
+want to avoid this implementation in favor of one which is a little more table-oriented.
+
+These classes were made as the foundation to run the asymmetric exclusion process, so the point was to
+let particles run on them, jump to neighbors without overlapping, etc., and the graph calculations are
+kept to a minimum, and so the implementation reflects a rapid and intuitive data structure which can
+afford to be a bit slow.
+*/
 
 
 #ifndef DeSalvoPolymorphicGraph_h
@@ -133,6 +139,10 @@ namespace desalvo_standard_library {
         /** No resources itself, just the standard virtual destructor. */
         virtual ~Node() = default;
 
+        /** @returns the label of the node. */
+        virtual std::string get_label() const { return ""; }
+
+
         virtual void print(std::ostream& out=std::cout) const = 0;
     private:
         // Which graph the node currently belongs to.
@@ -151,6 +161,9 @@ namespace desalvo_standard_library {
 
         /** No resources itself, just the standard virtual destructor. */
         virtual ~LabelledNode() = default;
+
+        /** @returns the label of the node. */
+        std::string get_label() const {return label; }
 
         virtual void print(std::ostream& out=std::cout) const;
 
