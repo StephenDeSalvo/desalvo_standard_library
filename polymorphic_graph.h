@@ -56,6 +56,10 @@ namespace desalvo_standard_library {
         // No default or copy construction allowed, must always refer to a PolymorphicGraph and never be copied.
         Edge() = delete;
         Edge(Edge& e) = delete;
+        Edge& operator=(Edge& e) = delete;
+
+        Edge(Edge&& e) = default;
+        
         Edge(PolymorphicGraph* initial_graph);
 
         /** No resources itself, just the standard virtual destructor. */
@@ -81,6 +85,9 @@ namespace desalvo_standard_library {
         // Must initialize Undirected Edge with two nodes, no default or copy contruction allowed.
         UndirectedEdge() = delete;
         UndirectedEdge(UndirectedEdge& e) = delete;
+        UndirectedEdge& operator=(UndirectedEdge& e) = delete;
+        UndirectedEdge(UndirectedEdge&& e) = default;
+        
         UndirectedEdge(PolymorphicGraph* initial_graph, Node* initial_first_node, Node* initial_second_node);
 
         /** No resources itself, just the standard virtual destructor. */
@@ -95,6 +102,8 @@ namespace desalvo_standard_library {
         // Must initialize Directed Edge with two nodes, from one to the other, no default or copy contruction allowed.
         DirectedEdge() = delete;
         DirectedEdge(DirectedEdge& e) = delete;
+        DirectedEdge& operator=(DirectedEdge& e) = delete;
+        DirectedEdge(DirectedEdge&& e) = default;
         DirectedEdge(PolymorphicGraph* initial_graph, Node* initial_start, Node* initial_stop);
 
         /** No resources itself, just the standard virtual destructor. */
@@ -112,7 +121,9 @@ namespace desalvo_standard_library {
     public:
         // Must initialize Weighted Directed Edge with two nodes, from one to the other with a weight, no default or copy contruction allowed.
         WeightedDirectedEdge() = delete;
-        WeightedDirectedEdge(DirectedEdge& e) = delete;
+        WeightedDirectedEdge(WeightedDirectedEdge& e) = delete;
+        WeightedDirectedEdge& operator=(WeightedDirectedEdge& e) = delete;
+        WeightedDirectedEdge(WeightedDirectedEdge&& e) = default;
         WeightedDirectedEdge(PolymorphicGraph* initial_graph, Node* initial_start, Node* initial_stop, double initial_weight);
 
         /** No resources itself, just the standard virtual destructor. */
@@ -132,6 +143,8 @@ namespace desalvo_standard_library {
     public:
         Node() = delete;
         Node(Node&) = delete;
+        Node& operator=(Node&) = delete;
+        Node(Node&&) = default;
         Node(PolymorphicGraph* initial_graph); // : graph(initial_graph) { }
         Node(PolymorphicGraph* initial_graph, Edge* initial_edge); // : graph(initial_graph) { incident_edges.push_back(initial_edge); }
         Node(PolymorphicGraph* initial_graph, std::vector<Edge*>& initial_incident_edges); // : graph(initial_graph), incident_edges(initial_incident_edges) { }
@@ -155,6 +168,8 @@ namespace desalvo_standard_library {
     public:
         LabelledNode() = delete;
         LabelledNode(LabelledNode&) = delete;
+        LabelledNode& operator=(LabelledNode&) = delete;
+        LabelledNode(LabelledNode&&) = default;
         LabelledNode(PolymorphicGraph* initial_graph, std::string initial_label); // : Node(initial_graph), label(initial_label) { initial_graph->add_node(this); };
         LabelledNode(PolymorphicGraph* initial_graph, Edge* initial_edge, const std::string& initial_label); // : Node(initial_graph, initial_edge), label(initial_label) { initial_graph->add_node(this); };
         LabelledNode(PolymorphicGraph* initial_graph, std::vector<Edge*>& initial_incident_edges, const std::string& initial_label); // : Node(initial_graph, initial_incident_edges), label(initial_label) { initial_graph->add_node(this); };
@@ -179,6 +194,7 @@ namespace desalvo_standard_library {
         PolymorphicGraph() = default;
         // Do NOT allow copy construction for memory management reasons.
         PolymorphicGraph(PolymorphicGraph& g) = delete;
+        PolymorphicGraph& operator=(PolymorphicGraph&) = delete;
 
         /** Constructs a PolymorphicGraph using the input nodes and edges.
             It assumes everything is in order, but if you want to be safe
