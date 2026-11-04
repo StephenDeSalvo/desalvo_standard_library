@@ -470,57 +470,6 @@ namespace desalvo_standard_library {
     
     
     
-#if 0
-    /** @class DiscreteUniform
-     @brief Uniform over set of elements {a,a+1,...,b-1,b}
-     
-     Inherits from RandomVariable so as long as operator()(URNG& gen) is overloaded to return a random value we can
-     invoke its member functions.
-     
-     Store a lower and upper bound denoting the smallest and largest values capable of being generated.
-     */
-    template<typename ReturnType = int, typename ParameterType=ReturnType, typename URNG= std::mt19937_64>
-    class independent_uniform_int_distributions : public RandomVariable<ReturnType, independent_uniform_int_distributions<ReturnType, ParameterType, URNG>, URNG> {
-    public:
-        
-        /** Constructs a random variable for random values in {a,a+1,...,b-1,b}
-         @param a is the lower bound
-         @param b is the upper bound
-         */
-        template<typename InputIterator>
-        independent_uniform_int_distributions(InputIterator start, InputIterator stop) {
-            
-            
-            
-        };
-        
-        /** Generates random value from distribution using the std distributions.
-         @param gen is the random number generator, by default 64-bit.
-         @returns random element
-         */
-        ReturnType operator()(URNG& gen = generator_64) {
-            std::uniform_int_distribution<ReturnType> r(lower,upper);
-            return r(gen);
-        }
-        
-        /** Returns the expected value of the random variable
-         ReturnType must have operator+(ReturnType, ReturnType) defined, and the return type of operator+ must be castable to F
-         @returns (lower+upper)/2
-         */
-        template<typename F=double>
-        F mean() {
-            return (static_cast<F>(lower+upper))/2;
-        }
-        
-        // TODO: Write more statistics properties like standard deviation, moments, kurtosis, etc.
-        
-    private:
-        /** @var lower is the lower bound for random generation */
-        std::uniform_int_distribution<ReturnType> unifs;
-        /** @var upper is the upper bound for random generation */
-        ParameterType upper;
-    };
-#endif
     
     /** @class truncated_geometric_distribution
      @brief truncated geometric distribution

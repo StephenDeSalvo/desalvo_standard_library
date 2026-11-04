@@ -14,7 +14,8 @@ CXXFLAGS ?= -std=c++14 -O1 -Wall
 # ahead of the system headers for angle-bracket includes too.
 INCLUDES  = -iquote .. -iquote .
 
-SOURCES = unit_tests.cpp integer_partition_tests.cpp asep_tests.cpp
+SOURCES = unit_tests.cpp integer_partition_tests.cpp asep_tests.cpp \
+          finished_components_tests.cpp
 TARGET  = dsl_tests
 
 .PHONY: all build clean

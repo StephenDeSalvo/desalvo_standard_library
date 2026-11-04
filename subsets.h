@@ -10,6 +10,7 @@
 #define DeSalvo_Standard_Library_subsets_h
 
 #include "sequence.h"
+#include "numerical.h"   // range
 
 namespace desalvo_standard_library {
     
@@ -33,19 +34,19 @@ namespace desalvo_standard_library {
         
             typedef dsl::finite_sequence<dsl::store::random_access,subsets<dsl::store::random_access,T,V,SV>,V,SV> finite;
 
+        public:
 
-            template<typename V, typename SV>
-            class subsets<dsl::store::random_access,subsets<dsl::store::random_access,T,V,SV>
-            {
-            public:
-                subsets(const V& superset) : max_value(superset.size()) {
-                    
-                    
-                
-                };
-        
-        
-        
+            /** Subsets of {1,...,n}, starting from the empty set.
+                @param n is the largest value a subset may contain. */
+            subsets(size_t n = 0) : max_value(n) { }
+
+            /** Subsets of the index set of `superset`, i.e. of {1,...,|superset|}.
+                @param superset supplies the size. */
+            subsets(const V& superset) : max_value(superset.size()) { }
+
+            /** The largest value a subset may contain. */
+            size_t n() const { return max_value; }
+
         /** The sequence goes emptyset,1,2,3,4,...,N,12,13,14,...,1N,23,24,25,...,2N,...,(N-1)N,123,124,...,(N-2)(N-1)N,1234,1235,...,1...N,emptyset. */
         bool next_in_sequence() {
             
@@ -76,7 +77,7 @@ namespace desalvo_standard_library {
                 // If we have largest set of a given size, restart with one size larger 12...k(k+1)
                 if(n == *largest) {
                     if(n>1) {
-                        sets = dnl::range<size_t,V>(sets.size()+1);
+                        sets = range<size_t,V>(sets.size()+1);
                         return true;
                     }
                     else {
@@ -117,7 +118,7 @@ namespace desalvo_standard_library {
             out << sets;
         }
         
-        friend std::ostream& operator<<(std::ostream& out, SetOfSubsets& s) {
+        friend std::ostream& operator<<(std::ostream& out, const subsets& s) {
             return (out << s.sets);
         }
         
@@ -127,32 +128,7 @@ namespace desalvo_standard_library {
     };
     
     
-    template<typename V, typename SV>
-    class SetOfSubsets<SequenceType::StoreAll, V, SV>
-    {
-    public:
-        SetOfSubsets(size_t n) : max_value(n) {
-            
-            SetOfSubsets<SequenceType::StoreOne, V,SV> sets(n);
-            
-            do {
-                all_sets.push_back( sets() );
-            }while(sets.next_in_sequence());
-        };
-        
-        V& operator[](size_t i) {
-            return all_sets[i];
-        }
-        
-        friend std::ostream& operator<<(std::ostream& out, SetOfSubsets& s) {
-            return out << s.all_sets;
-        }
-        
-        
-    private:
-        SV all_sets;
-        size_t max_value;
-    };
+
     
     
     

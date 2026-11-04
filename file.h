@@ -47,10 +47,12 @@ namespace desalvo_standard_library {
     
     // Undocumented, for personal use
     namespace path {
-        // Author's own machine; override in your own code if you use these.
-        static std::string Teaching = "/Users/stephendesalvo/Documents/Teaching/";
-        static std::string Research = "/Users/stephendesalvo/Documents/Research/";
-        static std::string Permutahedron = "/Users/stephendesalvo/Documents/Research/PermutahedronVisualization/";
+        // Convenience prefixes for your own directories. Empty by default:
+        // they used to hold absolute paths on the author's machine, which is
+        // no use to anyone else. Assign them once at the start of a program.
+        static std::string Teaching = "";
+        static std::string Research = "";
+        static std::string Permutahedron = "";
     };
     
     /** @enum file_type controls the type of file */

@@ -9,6 +9,7 @@
 
 #include "file.h"
 #include "numerical.h"
+#include "binary_integer.h"
 #include "integer_partition.h"
 #include "asep.h"
 #include "std_cout.h"

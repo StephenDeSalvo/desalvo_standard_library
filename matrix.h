@@ -64,93 +64,6 @@ namespace desalvo_standard_library {
         dsl::table<ValueType,WorkingPrecision>(static_cast<dsl::table<ValueType,WorkingPrecision>>(initial_matrix)) {
         }
         
-#if 0
-        matrix(matrix&& initial_matrix) : m(initial_matrix.m), n(initial_matrix.n), entry(initial_matrix.entry) {
-            initial_matrix.entry = nullptr;
-            //std::cout << "Move performed" << std::endl;
-        }
-        
-        /** Swap two matrix handles
-            @param other matrix to swap. */
-        void swap(matrix& other) {
-            std::swap(m, other.m);
-            std::swap(n, other.n);
-            std::swap(this->entry, other.entry);
-        }
-        
-        /** Assigns values via copy & swap idiom
-         @param val is the initial value for all entries. */
-        matrix& operator=(matrix other) {
-
-            // NOT std::swap, see above
-            swap(other);
-            return *this;
-        }
-        
-        /** Initialize matrix using notation {{1,2,3},{4,5,6},{7,8,9}}
-            @param init is the initializer list. */
-        matrix(std::initializer_list<ValueType> init)  {
-            
-            // Initialize t to first element in contiguous array
-            auto t = std::begin(entry);
-            
-            // Iterators through each row
-            auto start = std::begin(init);
-            auto stop = std::end(init);
-            
-            m = stop - start;
-            n = (*start).size();
-            entry = new ValueType[m*n];
-            
-            // For each row ...
-            while(start != stop) {
-                auto st = begin(*start);
-                auto sp = end(*start++);
-                
-                // Copy over values into t
-                while(st != sp)
-                    *t++ = *st++;
-            }
-        };
-        
-        /** Initialize using a row-major std::array of m*n values
-            @tparam VType is any type which can be cast to ValueType
-            @param init is an array of values to initilize. */
-        template<typename VType, size_t m, size_t n>
-        matrix(std::array<VType,n*m> init) : entry(new ValueType[n*m])  {
-            
-            //auto start = std::begin(init);
-            //auto stop = std::end(init);
-            
-            //auto t = std::begin(entry);
-            
-            //while(start != stop) {
-            //    *t++ = static_cast<ValueType>(*start++);
-            //}
-            
-            std::copy_n(std::begin(init), m*n, std::begin(entry));
-            
-        }
-        
-        /** Initialize using a vector of vectors
-         @tparam VType is any type which can be cast to ValueType
-         @param v is an array of values to initilize. */
-        template<typename VType>
-        matrix(const std::vector<std::vector<VType>>& v) {
-            //            matrixIterator tstart = begin();
-            m = v.size();
-            n = v[0].size();
-            entry = new ValueType[n*m];
-            
-            ValueType* initializer = entry;
-            for(size_t i=0;i<m;++i)
-                for(size_t j=0;j<n;++j)
-                    *initializer++ = static_cast<ValueType>(v[i][j]);
-            //std::copy(std::cbegin(v), std::cend(v), entry);
-        };
-        
-        
-#endif
         /** virtual destructors deletes entry memory. */
         virtual ~matrix() { }; //delete [] entry; };
         
@@ -202,12 +115,9 @@ namespace desalvo_standard_library {
             
             matrix clone(lhs.m,rhs.n);
             
-            //for(auto& x : dnl::table_indices(rhs.m,rhs.n))
             // For each column j=0,...,n-1 in this matrix
-            //for(auto& j : dnl::indices(rhs.n))
             for(int j=0;j<rhs.n;++j)
                 // For each row i=0,...,m-1 in this matrix
-                //for(auto& i : dnl::indices(lhs.m))
                 for(int i=0;i<lhs.m;++i)
                     clone(i,j) = std::inner_product(lhs.cbegin_row(i), lhs.cend_row(i), rhs.cbegin_column(j), static_cast<WorkingPrecision>(0.));
             

@@ -691,7 +691,6 @@ namespace desalvo_standard_library {
         
         dsl::time timer;
         
-        dsl::file< dsl::file_type::output > output("/Users/stephendesalvo/Documents/Research/100_x_100_timings.txt");
         
         //EntryType zero = static_cast<EntryType>(0);
         EntryType one = static_cast<EntryType>(1);
@@ -845,8 +844,9 @@ namespace desalvo_standard_library {
                 }
                 
                 if(verbose >= 1.5) {
+                    // the same line went to a file on the author's machine as well;
+                    // every other diagnostic here goes to std::cout, so it does now too
                     std::cout << "Working on column: " << j << " " << timer.toc() << std::endl;
-                    output <<"Working on column: " << j << " " << timer.toc() << std::endl;
                     timer.reset();
                     
                     if(verbose >= 1.7) {
@@ -2575,47 +2575,3 @@ namespace desalvo_standard_library {
 
 
 
-#if 0
-
-// too slow to find the first one.
-bool first_in_sequence(Table& t) const {
-    
-    auto m = row_sums.size();
-    auto n = column_sums.size();
-    
-    t = Table(m,n);
-    
-    auto rit = std::begin(row_sums);
-    
-    for(size_t i=0;i<m;++i) {
-        auto row = dsl::binary_row(n,*rit++);
-        
-        std::copy_n(row.begin(), n, t.begin_row(i));
-    }
-    
-    //std::cout << "t = \n" << t << std::endl;
-    
-    size_t current_row = m-1;
-    while(t.template column_sums<Vector>() != column_sums) {
-        
-        while(current_row > 0 && !std::next_permutation(t.begin_row(current_row), t.end_row(current_row), std::greater<SumType>())) {
-            current_row--;
-        }
-        
-        if(current_row == 0 && !std::next_permutation(t.begin_row(current_row), t.end_row(current_row), std::greater<SumType>())) {
-            //std::cout << "No possible tables exist!" << std::endl;
-            return false; //Table(m,n);
-        }
-        
-        current_row = m-1;
-        
-        //std::cout << "t = \n" << t << std::endl;
-        
-        
-    }
-    
-    return true;
-    
-}
-
-#endif

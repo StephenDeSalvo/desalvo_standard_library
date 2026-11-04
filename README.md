@@ -106,26 +106,17 @@ does not mean no two particles are ever co-located.
 incidence matrix (see `polymorphic/input/graph.txt`). On a graph whose edges
 carry no weights, a walk chooses uniformly among the neighbours.
 
-**Other headers** — permutations with restrictions (`permutation.h`),
-set partitions, subsets and multiset subsets (`set_partition.h`,
-`subsets.h`), Latin squares, Sudoku and contingency tables
-(`latin_square.h`, `sudoku.h`, `contingency_table.h`), exact rational
-arithmetic (`fraction.h`), tables and matrices (`table.h`, `matrix.h`),
-statistics (`statistics.h`), timers (`timer.h`, `dsl_time.h`), and stream and
-file helpers (`std_cout.h`, `std_cin.h`, `file.h`).
+**Other headers** — permutations with restrictions (`permutation.h`), set
+partitions (`set_partition.h`), subsets in lexicographic order
+(`subsets.h`), Latin squares and contingency tables (`latin_square.h`,
+`contingency_table.h`), exact rational arithmetic (`fraction.h`),
+arbitrary-precision integers (`binary_integer.h`), tables and matrices
+(`table.h`, `matrix.h`), statistics (`statistics.h`), timers (`timer.h`,
+`dsl_time.h`), and stream and file helpers (`std_cout.h`, `std_cin.h`,
+`file.h`).
 
-## Status of the individual headers
-
-Everything reachable from `dsl.h` and `dsl_usings.h` compiles, and every
-header is safe to include from more than one translation unit.
-
-Two headers are **unfinished** and will not compile: `subsets.h` and the part
-of `sudoku.h` that depends on it. They were written against an earlier
-interface — `SequenceType` and `Permutation`, since replaced by `dsl::store`
-and `permutation` — and were never migrated: `SequenceType` is not defined
-anywhere, and `SetOfSubsets` exists only as a specialisation with no primary
-template. They are left as they are rather than guessed at. Subsets are
-otherwise available through `set_partition.h` and `combinatorics.h`.
+Every header compiles on its own and is safe to include from more than one
+translation unit. `cd unit_tests && make` builds and runs the tests.
 
 ## Tests
 
@@ -171,6 +162,23 @@ writing for cannot see where the code came from unless you tell them.
   carry the paper reference with it.
 - **Keep the licence.** This is GNU GPLv3 (see `license.txt`); it travels
   with the code and with derivative works, including ones you generate.
+
+## Status
+
+This library is **complete and no longer developed**. It is kept because the
+code works and the documentation is worth having, not because more is coming.
+Everything in it compiles and is covered by the tests above; nothing is left
+half-finished, and there is no roadmap.
+
+Newer work on random sampling of combinatorial structures happens in Python:
+
+> **https://github.com/StephenDeSalvo/CombinatorialProbability**
+
+If you want a uniformly random Sudoku matrix, random integer partitions with
+a validated weight, or set partitions, start there — it is tested against the
+published counts. This library is the C++ of record for permutations with
+restrictions, contingency tables, Latin squares and the asymmetric exclusion
+process, which have no Python equivalent yet.
 
 ## Licence
 
