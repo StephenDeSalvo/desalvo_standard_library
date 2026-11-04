@@ -84,10 +84,14 @@
 // File-scoped variables which control how collections are printed out.
 // Arbitrarily chosen, same for all collections
 // Prints out elements of the form {x,x,...,x}, where x can also be an element of the form {y,y,...,}, ... .
-std::string cout_separation = ",";
-std::string cout_open_bracket = "{";
-std::string cout_close_bracket = "}";
-std::string no_ending = "";
+// static, not extern: a header-only library cannot export a variable
+// definition without colliding when two translation units include it, and
+// C++11 has no inline variables. One copy per TU; set them per TU if you
+// change them from the defaults.
+static std::string cout_separation = ",";
+static std::string cout_open_bracket = "{";
+static std::string cout_close_bracket = "}";
+static std::string no_ending = "";
 
     template<typename T, typename F>
     std::ostream& operator<<(std::ostream& out, const std::pair<T,F>& vec);

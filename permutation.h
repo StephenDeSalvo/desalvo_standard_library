@@ -715,7 +715,7 @@ namespace desalvo_standard_library {
         void insert(InputIterator start, InputIterator stop);
         
         
-        void clear() { restrictions.clear(); };
+        void clear() { restricted_pairs.clear(); };
         
         operator bool();
         
@@ -728,7 +728,7 @@ namespace desalvo_standard_library {
         size_t n;
         V first_element;
         
-        std::set< std::pair<size_t, size_t > > restrictions;
+        std::set< std::pair<size_t, size_t > > restricted_pairs;
         
         bool violates_restrictions(V& v) const;
         void reinitialize();
@@ -752,7 +752,7 @@ namespace desalvo_standard_library {
      @param initialize_restrictions is the initial set of restrictions
      */
     template<typename T, typename V, typename SV>
-    permutation<dsl::store::random_access,restrictions::by_pairs,T,V,SV>::permutation(size_t input_n, const std::set< std::pair<size_t, size_t> >& initialize_restrictions ) : n(input_n), restrictions(initialize_restrictions) {
+    permutation<dsl::store::random_access,restrictions::by_pairs,T,V,SV>::permutation(size_t input_n, const std::set< std::pair<size_t, size_t> >& initialize_restrictions ) : n(input_n), restricted_pairs(initialize_restrictions) {
         
         first_element = first_in_sequence();
         finite::store_sequence();
@@ -764,7 +764,7 @@ namespace desalvo_standard_library {
      @param initialize_restrictions is the initial set of restrictions
      */
     template<typename T, typename V, typename SV>
-    permutation<dsl::store::random_access,restrictions::by_pairs,T,V,SV>::permutation(size_t input_n, std::initializer_list<std::pair<size_t,size_t> > initial_list) : n(input_n), restrictions(initial_list) {
+    permutation<dsl::store::random_access,restrictions::by_pairs,T,V,SV>::permutation(size_t input_n, std::initializer_list<std::pair<size_t,size_t> > initial_list) : n(input_n), restricted_pairs(initial_list) {
         
         first_element = first_in_sequence();
         finite::store_sequence();
@@ -782,7 +782,7 @@ namespace desalvo_standard_library {
         for(size_t i=0, n=v.size(); i<n;i++) {
             
             // search for each restriction in the permutation
-            if( restrictions.find( std::make_pair(i+1,v[i]) ) != restrictions.end())
+            if( restricted_pairs.find( std::make_pair(i+1,v[i]) ) != restricted_pairs.end())
                 return true;
         }
         return false;
@@ -868,7 +868,7 @@ namespace desalvo_standard_library {
     void permutation<dsl::store::random_access,restrictions::by_pairs,T,V,SV>::insert(const std::pair<size_t, size_t>& res) {
         
         // inserts a new restriction, then need to recompute everything
-        restrictions.insert(res);
+        restricted_pairs.insert(res);
         
         reinitialize();
         
@@ -885,7 +885,7 @@ namespace desalvo_standard_library {
     void permutation<dsl::store::random_access,restrictions::by_pairs,T,V,SV>::insert(std::pair<size_t, size_t>&& res) {
         
         // inserts a new restriction, then need to recompute everything
-        restrictions.insert(res);
+        restricted_pairs.insert(res);
         reinitialize();
     };
     
@@ -897,7 +897,7 @@ namespace desalvo_standard_library {
         
         // inserts new restrictions, then need to recompute everything
         for(auto& x : res)
-            restrictions.insert(x);
+            restricted_pairs.insert(x);
         
         reinitialize();
         
@@ -913,7 +913,7 @@ namespace desalvo_standard_library {
         
         // inserts new restrictions, then need to recompute everything
         while(start != stop)
-            restrictions.insert(*start++);
+            restricted_pairs.insert(*start++);
         
         reinitialize();
     }
@@ -927,7 +927,7 @@ namespace desalvo_standard_library {
         return first_element != static_cast<V>(0);
     };
     
-    /** reinitializes all of the elements in the sequence, typically after adding some new type of restrictions. */
+    /** reinitializes all of the elements in the sequence, typically after adding some new type of restricted_pairs. */
     template<typename T, typename V, typename SV>
     void permutation<dsl::store::random_access,restrictions::by_pairs,T,V,SV>::reinitialize() {
         
@@ -978,7 +978,7 @@ namespace desalvo_standard_library {
         void insert(InputIterator start, InputIterator stop);
         
         
-        void clear() { restrictions.clear(); };
+        void clear() { restricted_pairs.clear(); };
         
         operator bool();
         
@@ -993,7 +993,7 @@ namespace desalvo_standard_library {
         V last_element;
         
         //V permutation;
-        std::set< std::pair<size_t, size_t > > restrictions;
+        std::set< std::pair<size_t, size_t > > restricted_pairs;
         
         bool violates_restrictions(V& v) const;
         void reinitialize();
@@ -1019,7 +1019,7 @@ namespace desalvo_standard_library {
      @param initialize_restrictions is the initial set of restrictions
      */
     template<typename T, typename V, typename SV>
-    permutation<dsl::store::bidirectional,restrictions::by_pairs,T,V,SV>::permutation(size_t input_n, const std::set< std::pair<size_t, size_t> >& initialize_restrictions ) : n(input_n), restrictions(initialize_restrictions) {
+    permutation<dsl::store::bidirectional,restrictions::by_pairs,T,V,SV>::permutation(size_t input_n, const std::set< std::pair<size_t, size_t> >& initialize_restrictions ) : n(input_n), restricted_pairs(initialize_restrictions) {
         
         // Prepare the first and last elements in the sequence.
         first_element = first_in_sequence();
@@ -1032,7 +1032,7 @@ namespace desalvo_standard_library {
      @param initialize_restrictions is the initial set of restrictions
      */
     template<typename T, typename V, typename SV>
-    permutation<dsl::store::bidirectional,restrictions::by_pairs,T,V,SV>::permutation(size_t input_n, std::initializer_list<std::pair<size_t,size_t> > initial_list) : n(input_n), restrictions(initial_list) {
+    permutation<dsl::store::bidirectional,restrictions::by_pairs,T,V,SV>::permutation(size_t input_n, std::initializer_list<std::pair<size_t,size_t> > initial_list) : n(input_n), restricted_pairs(initial_list) {
         
         // Prepare the first and last elements in the sequence.
         first_element = first_in_sequence();
@@ -1114,7 +1114,7 @@ namespace desalvo_standard_library {
         for(size_t i=0, n=v.size(); i<n;i++) {
             
             // Check for a violation
-            if( restrictions.find( std::make_pair(i+1,v[i]) ) != restrictions.end())
+            if( restricted_pairs.find( std::make_pair(i+1,v[i]) ) != restricted_pairs.end())
                 return true;
         }
         return false;
@@ -1208,7 +1208,7 @@ namespace desalvo_standard_library {
     void permutation<dsl::store::bidirectional,restrictions::by_pairs,T,V,SV>::insert(const std::pair<size_t, size_t>& res) {
         
         // Insert new restriction, then recompute.
-        restrictions.insert(res);
+        restricted_pairs.insert(res);
         reinitialize();
     };
     
@@ -1219,7 +1219,7 @@ namespace desalvo_standard_library {
     void permutation<dsl::store::bidirectional,restrictions::by_pairs,T,V,SV>::insert(std::pair<size_t, size_t>&& res) {
         
         // Insert new restriction, then recompute.
-        restrictions.insert(res);
+        restricted_pairs.insert(res);
         reinitialize();
     };
     
@@ -1231,7 +1231,7 @@ namespace desalvo_standard_library {
         
         // Insert new restrictions, then recompute.
         for(auto& x : res)
-            restrictions.insert(x);
+            restricted_pairs.insert(x);
         
         reinitialize();
         
@@ -1247,7 +1247,7 @@ namespace desalvo_standard_library {
         
         // Insert restrictions, then recompute.
         while(start != stop)
-            restrictions.insert(*start++);
+            restricted_pairs.insert(*start++);
         
         reinitialize();
     }
@@ -1261,7 +1261,7 @@ namespace desalvo_standard_library {
         return first_element != static_cast<V>(0);
     };
     
-    /** reinitializes all of the elements in the sequence, typically after adding some new type of restrictions. */
+    /** reinitializes all of the elements in the sequence, typically after adding some new type of restricted_pairs. */
     template<typename T, typename V, typename SV>
     void permutation<dsl::store::bidirectional,restrictions::by_pairs,T,V,SV>::reinitialize() {
         
@@ -1314,7 +1314,7 @@ namespace desalvo_standard_library {
         void insert(InputIterator start, InputIterator stop);
         
         /** Clears all restrictions, does NOT recompute. */
-        void clear() { restrictions.clear(); };
+        void clear() { restricted_pairs.clear(); };
         
         operator bool();
         
@@ -1323,7 +1323,7 @@ namespace desalvo_standard_library {
         V first_element;
         V last_element;
         
-        std::set< std::pair<size_t, size_t > > restrictions;
+        std::set< std::pair<size_t, size_t > > restricted_pairs;
         
         bool violates_restrictions(V& v) const;
         void reinitialize();
@@ -1345,7 +1345,7 @@ namespace desalvo_standard_library {
      @param initialize_restrictions is the initial set of restrictions
      */
     template<typename T, typename V, typename SV>
-    permutation<dsl::store::forward,restrictions::by_pairs,T,V,SV>::permutation(size_t input_n, const std::set< std::pair<size_t, size_t> >& initialize_restrictions ) : n(input_n), restrictions(initialize_restrictions) {
+    permutation<dsl::store::forward,restrictions::by_pairs,T,V,SV>::permutation(size_t input_n, const std::set< std::pair<size_t, size_t> >& initialize_restrictions ) : n(input_n), restricted_pairs(initialize_restrictions) {
         first_element = first_in_sequence();
         
     };
@@ -1355,7 +1355,7 @@ namespace desalvo_standard_library {
      @param initialize_restrictions is the initial set of restrictions
      */
     template<typename T, typename V, typename SV>
-    permutation<dsl::store::forward,restrictions::by_pairs,T,V,SV>::permutation(size_t input_n, std::initializer_list<std::pair<size_t,size_t> > initial_list) : n(input_n), restrictions(initial_list) {
+    permutation<dsl::store::forward,restrictions::by_pairs,T,V,SV>::permutation(size_t input_n, std::initializer_list<std::pair<size_t,size_t> > initial_list) : n(input_n), restricted_pairs(initial_list) {
         
         first_element = first_in_sequence();
     };
@@ -1405,7 +1405,7 @@ namespace desalvo_standard_library {
         for(size_t i=0, n=v.size(); i<n;i++) {
             
             // Check each restriction against each entry
-            if( restrictions.find( std::make_pair(i+1,v[i]) ) != restrictions.end())
+            if( restricted_pairs.find( std::make_pair(i+1,v[i]) ) != restricted_pairs.end())
                 return true;
         }
         return false;
@@ -1460,7 +1460,7 @@ namespace desalvo_standard_library {
     void permutation<dsl::store::forward,restrictions::by_pairs,T,V,SV>::insert(const std::pair<size_t, size_t>& res) {
         
         // Add new restriction, then reinitialize
-        restrictions.insert(res);
+        restricted_pairs.insert(res);
         reinitialize();
     };
     
@@ -1471,7 +1471,7 @@ namespace desalvo_standard_library {
     void permutation<dsl::store::forward,restrictions::by_pairs,T,V,SV>::insert(std::pair<size_t, size_t>&& res) {
         
         // Add new restriction, then reinitialize
-        restrictions.insert(res);
+        restricted_pairs.insert(res);
         reinitialize();
     };
     
@@ -1483,7 +1483,7 @@ namespace desalvo_standard_library {
         
         // Add new restrictions, then reinitialize
         for(auto& x : res)
-            restrictions.insert(x);
+            restricted_pairs.insert(x);
         
         reinitialize();
         
@@ -1499,7 +1499,7 @@ namespace desalvo_standard_library {
         
         // Add new restrictions, then reinitialize
         while(start != stop)
-            restrictions.insert(*start++);
+            restricted_pairs.insert(*start++);
         
         reinitialize();
     }
@@ -1514,7 +1514,7 @@ namespace desalvo_standard_library {
     };
     
     
-    /** reinitializes all of the elements in the sequence, typically after adding some new type of restrictions. */
+    /** reinitializes all of the elements in the sequence, typically after adding some new type of restricted_pairs. */
     template<typename T, typename V, typename SV>
     void permutation<dsl::store::forward,restrictions::by_pairs,T,V,SV>::reinitialize() {
         first_element = first_in_sequence();
@@ -1553,7 +1553,7 @@ namespace desalvo_standard_library {
         size_t n;
         V first_element;
         
-        std::function<bool(V&)> restrictions;
+        std::function<bool(V&)> restriction_test;
         
         bool violates_restrictions(V& v) const;
         void reinitialize();
@@ -1566,7 +1566,7 @@ namespace desalvo_standard_library {
      @param input_n is the initial size of the permutation.
      */
     template<typename T, typename V, typename SV>
-    permutation<dsl::store::random_access,restrictions::by_function,T,V,SV>::permutation(size_t input_n) : n(input_n), restrictions([](V& v) { return false;}) {
+    permutation<dsl::store::random_access,restrictions::by_function,T,V,SV>::permutation(size_t input_n) : n(input_n), restriction_test([](V& v) { return false;}) {
         first_element = first_in_sequence();
         finite::store_sequence();
         
@@ -1577,7 +1577,7 @@ namespace desalvo_standard_library {
      @param initialize_restrictions is the initial set of restrictions
      */
     template<typename T, typename V, typename SV>
-    permutation<dsl::store::random_access,restrictions::by_function,T,V,SV>::permutation(size_t input_n, std::function<bool(V&)> initialize_restrictions ) : n(input_n), restrictions(initialize_restrictions) {
+    permutation<dsl::store::random_access,restrictions::by_function,T,V,SV>::permutation(size_t input_n, std::function<bool(V&)> initialize_restrictions ) : n(input_n), restriction_test(initialize_restrictions) {
         
         first_element = first_in_sequence();
         finite::store_sequence();
@@ -1595,7 +1595,7 @@ namespace desalvo_standard_library {
         for(size_t i=0, n=v.size(); i<n;i++) {
             
             // search for presence of restriction in the permutation
-            if( restrictions(v) )
+            if( restriction_test(v) )
                 return true;
         }
         return false;
@@ -1683,7 +1683,7 @@ namespace desalvo_standard_library {
         return first_element != static_cast<V>(0);
     };
     
-    /** reinitializes all of the elements in the sequence, typically after adding some new type of restrictions. */
+    /** reinitializes all of the elements in the sequence, typically after adding some new type of restriction_test. */
     template<typename T, typename V, typename SV>
     void permutation<dsl::store::random_access,restrictions::by_function,T,V,SV>::reinitialize() {
         
@@ -1703,7 +1703,7 @@ namespace desalvo_standard_library {
     */
     template<typename T, typename V, typename SV>
     void permutation<dsl::store::random_access,restrictions::by_function,T,V,SV>::replace_restriction_function(std::function<bool(V&)> new_restriction_function) {
-        restrictions = new_restriction_function;
+        restriction_test = new_restriction_function;
         reinitialize();
     }
     
@@ -1744,7 +1744,7 @@ namespace desalvo_standard_library {
         V first_element;
         V last_element;
         
-        std::function<bool(V&)> restrictions;
+        std::function<bool(V&)> restriction_test;
         
         bool violates_restrictions(V& v) const;
         void reinitialize();
@@ -1757,7 +1757,7 @@ namespace desalvo_standard_library {
      @param input_n is the initial size of the permutation.
      */
     template<typename T, typename V, typename SV>
-    permutation<dsl::store::bidirectional,restrictions::by_function,T,V,SV>::permutation(size_t input_n) : n(input_n), restrictions([](V& v) { return false;}){
+    permutation<dsl::store::bidirectional,restrictions::by_function,T,V,SV>::permutation(size_t input_n) : n(input_n), restriction_test([](V& v) { return false;}){
         
         // Prepare the first and last elements in the sequence.
         first_element = first_in_sequence();
@@ -1770,7 +1770,7 @@ namespace desalvo_standard_library {
      @param initialize_restrictions is the initial set of restrictions
      */
     template<typename T, typename V, typename SV>
-    permutation<dsl::store::bidirectional,restrictions::by_function,T,V,SV>::permutation(size_t input_n, std::function<bool(V&)> initialize_restrictions ) : n(input_n), restrictions(initialize_restrictions) {
+    permutation<dsl::store::bidirectional,restrictions::by_function,T,V,SV>::permutation(size_t input_n, std::function<bool(V&)> initialize_restrictions ) : n(input_n), restriction_test(initialize_restrictions) {
         
         first_element = first_in_sequence();
         last_element = last_in_sequence();
@@ -1854,7 +1854,7 @@ namespace desalvo_standard_library {
         for(size_t i=0, n=v.size(); i<n;i++) {
             
             // Check for a violation
-            if( restrictions(v) )
+            if( restriction_test(v) )
                 return true;
         }
         
@@ -1953,7 +1953,7 @@ namespace desalvo_standard_library {
         return first_element != static_cast<V>(0);
     };
     
-    /** reinitializes all of the elements in the sequence, typically after adding some new type of restrictions. */
+    /** reinitializes all of the elements in the sequence, typically after adding some new type of restriction_test. */
     template<typename T, typename V, typename SV>
     void permutation<dsl::store::bidirectional,restrictions::by_function,T,V,SV>::reinitialize() {
         
@@ -1967,7 +1967,7 @@ namespace desalvo_standard_library {
      */
     template<typename T, typename V, typename SV>
     void permutation<dsl::store::bidirectional,restrictions::by_function,T,V,SV>::replace_restriction_function(std::function<bool(V&)> new_restriction_function) {
-        restrictions = new_restriction_function;
+        restriction_test = new_restriction_function;
         reinitialize();
     }
     
@@ -2014,7 +2014,7 @@ namespace desalvo_standard_library {
         V first_element;
         V last_element;
         
-        std::function<bool(V&)> restrictions;
+        std::function<bool(V&)> restriction_test;
         
         bool violates_restrictions(V& v) const;
         void reinitialize();
@@ -2027,7 +2027,7 @@ namespace desalvo_standard_library {
      @param input_n is the initial size of the permutation.
      */
     template<typename T, typename V, typename SV>
-    permutation<dsl::store::forward,restrictions::by_function,T,V,SV>::permutation(size_t input_n) : n(input_n), restrictions([](V& v) { return false;}),finite_threadable(input_n) {
+    permutation<dsl::store::forward,restrictions::by_function,T,V,SV>::permutation(size_t input_n) : n(input_n), restriction_test([](V& v) { return false;}),finite_threadable(input_n) {
         first_element = first_in_sequence();
     };
     
@@ -2036,7 +2036,7 @@ namespace desalvo_standard_library {
      @param initialize_restrictions is the initial set of restrictions
      */
     template<typename T, typename V, typename SV>
-    permutation<dsl::store::forward,restrictions::by_function,T,V,SV>::permutation(size_t input_n, std::function<bool(V&)> initialize_restrictions ) : n(input_n), restrictions(initialize_restrictions), finite_threadable(input_n) {
+    permutation<dsl::store::forward,restrictions::by_function,T,V,SV>::permutation(size_t input_n, std::function<bool(V&)> initialize_restrictions ) : n(input_n), restriction_test(initialize_restrictions), finite_threadable(input_n) {
         
         first_element = first_in_sequence();
         
@@ -2087,7 +2087,7 @@ namespace desalvo_standard_library {
         for(size_t i=0, n=v.size(); i<n;i++) {
             
             // Check each restriction against each entry
-            if( restrictions(v))
+            if( restriction_test(v))
                 return true;
         }
         return false;
@@ -2196,7 +2196,7 @@ namespace desalvo_standard_library {
     };
     
     
-    /** reinitializes all of the elements in the sequence, typically after adding some new type of restrictions. */
+    /** reinitializes all of the elements in the sequence, typically after adding some new type of restriction_test. */
     template<typename T, typename V, typename SV>
     void permutation<dsl::store::forward,restrictions::by_function,T,V,SV>::reinitialize() {
         first_element = first_in_sequence();
@@ -2208,7 +2208,7 @@ namespace desalvo_standard_library {
      */
     template<typename T, typename V, typename SV>
     void permutation<dsl::store::forward,restrictions::by_function,T,V,SV>::replace_restriction_function(std::function<bool(V&)> new_restriction_function) {
-        restrictions = new_restriction_function;
+        restriction_test = new_restriction_function;
         reinitialize();
     }
 
@@ -2249,7 +2249,7 @@ namespace desalvo_standard_library {
         V first_element;
         V last_element;
         
-        std::function<bool(V&)> restrictions;
+        std::function<bool(V&)> restriction_test;
         
         bool violates_restrictions(V& v) const;
         void reinitialize();
@@ -2262,7 +2262,7 @@ namespace desalvo_standard_library {
      @param input_n is the initial size of the permutation.
      */
     template<typename T, typename V, typename SV>
-    permutation<dsl::store::forward,restrictions::by_function,T,V,SV>::permutation(size_t input_n) : n(input_n), restrictions([](V& v) { return false;}) {
+    permutation<dsl::store::forward,restrictions::by_function,T,V,SV>::permutation(size_t input_n) : n(input_n), restriction_test([](V& v) { return false;}) {
         first_element = first_in_sequence();
     };
     
@@ -2271,7 +2271,7 @@ namespace desalvo_standard_library {
      @param initialize_restrictions is the initial set of restrictions
      */
     template<typename T, typename V, typename SV>
-    permutation<dsl::store::forward,restrictions::by_function,T,V,SV>::permutation(size_t input_n, std::function<bool(V&)> initialize_restrictions ) : n(input_n), restrictions(initialize_restrictions) {
+    permutation<dsl::store::forward,restrictions::by_function,T,V,SV>::permutation(size_t input_n, std::function<bool(V&)> initialize_restrictions ) : n(input_n), restriction_test(initialize_restrictions) {
         
         first_element = first_in_sequence();
         
@@ -2322,7 +2322,7 @@ namespace desalvo_standard_library {
         for(size_t i=0, n=v.size(); i<n;i++) {
             
             // Check each restriction against each entry
-            if( restrictions(v))
+            if( restriction_test(v))
                 return true;
         }
         return false;
@@ -2380,7 +2380,7 @@ namespace desalvo_standard_library {
     };
     
     
-    /** reinitializes all of the elements in the sequence, typically after adding some new type of restrictions. */
+    /** reinitializes all of the elements in the sequence, typically after adding some new type of restriction_test. */
     template<typename T, typename V, typename SV>
     void permutation<dsl::store::forward,restrictions::by_function,T,V,SV>::reinitialize() {
         first_element = first_in_sequence();
@@ -2392,7 +2392,7 @@ namespace desalvo_standard_library {
      */
     template<typename T, typename V, typename SV>
     void permutation<dsl::store::forward,restrictions::by_function,T,V,SV>::replace_restriction_function(std::function<bool(V&)> new_restriction_function) {
-        restrictions = new_restriction_function;
+        restriction_test = new_restriction_function;
         reinitialize();
     }
 #endif

@@ -10,6 +10,7 @@
 #define DeSalvo_Standard_Library_permutation_pattern_h
 
 #include <algorithm>
+#include <vector>
 
 namespace desalvo_standard_library {
     

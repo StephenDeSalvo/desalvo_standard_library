@@ -1,6 +1,9 @@
 //
-//  time.h
+//  dsl_time.h
 //  DeSalvo Standard Library
+//
+//  Named with the dsl_ prefix, like dsl_algorithm.h: a header called time.h
+//  in the include path would shadow the system <time.h>.
 //
 //  Created by Stephen DeSalvo on 9/20/15.
 //  Copyright (c) 2015 Stephen DeSalvo. All rights reserved.
@@ -38,15 +41,15 @@ private:
 };
 
 /** Default constructor, initializes clock cycles to current number */
-time::time() : t(clock()) { };
+inline time::time() : t(clock()) { };
 
 /** Resets the clock cycles to current number in program */
-void time::reset() { t = clock(); };
+inline void time::reset() { t = clock(); };
 
 /** Calculates total time in seconds that has elapsed
  @returns number of seconds transpired since construction or last call to reset
  */
-double time::toc() { return (double)(clock()-t)/CLOCKS_PER_SEC; };
+inline double time::toc() { return (double)(clock()-t)/CLOCKS_PER_SEC; };
 
 }
 

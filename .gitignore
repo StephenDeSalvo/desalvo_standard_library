@@ -1,0 +1,14 @@
+# Build output
+a.out
+*.o
+*.exe
+unit_tests/dsl_tests
+
+# macOS
+.DS_Store
+
+# Editors
+*~
+*.swp
+.vscode/
+.idea/

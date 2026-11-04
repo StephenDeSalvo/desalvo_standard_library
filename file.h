@@ -15,11 +15,9 @@
 #include <fstream>
 
 // read(T&) streams into T, and for T = std::vector<U> the operator>> it
-// needs is declared at global scope in std_cin.h. std::vector's associated
-// namespace is std, so ADL will not find it at instantiation; it has to be
-// visible here, where the template is defined. Without this include,
-// whether file.h compiled depended on what the translation unit happened
-// to include first.
+// needs is declared at global scope in std_cin.h. It must be visible here,
+// where the template is defined, because ADL cannot find it at
+// instantiation: std::vector's associated namespace is std.
 #include "std_cin.h"
 #include <iomanip>
 #include <cstdio>
@@ -49,9 +47,10 @@ namespace desalvo_standard_library {
     
     // Undocumented, for personal use
     namespace path {
-        std::string Teaching = "/Users/stephendesalvo/Documents/Teaching/";
-        std::string Research = "/Users/stephendesalvo/Documents/Research/";
-        std::string Permutahedron = "/Users/stephendesalvo/Documents/Research/PermutahedronVisualization/";
+        // Author's own machine; override in your own code if you use these.
+        static std::string Teaching = "/Users/stephendesalvo/Documents/Teaching/";
+        static std::string Research = "/Users/stephendesalvo/Documents/Research/";
+        static std::string Permutahedron = "/Users/stephendesalvo/Documents/Research/PermutahedronVisualization/";
     };
     
     /** @enum file_type controls the type of file */
@@ -323,7 +322,7 @@ namespace desalvo_standard_library {
      {Now is the winter of our discontent,Made glorious summer by this sun of York;,And all the clouds that lour'd upon our house,In the deep bosom of the ocean buried.,Now are our brows bound with victorious wreaths;}
      @endcode
      */
-    bool getline(file<file_type::input>& fin, std::string& s) {
+    inline bool getline(file<file_type::input>& fin, std::string& s) {
         std::getline( fin.file_stream, s);
         return fin;
     }
@@ -365,7 +364,7 @@ namespace desalvo_standard_library {
      {1,6,4,3,2,2,3,1,5,6}
      @endcode
      */
-    file<file_type::input>::file(const std::string& input_filename) : filename(input_filename) {
+    inline file<file_type::input>::file(const std::string& input_filename) : filename(input_filename) {
         file_stream.open(filename, std::fstream::in);
         
         // Cannot continue with code if the file doesn't exist.
@@ -411,7 +410,7 @@ namespace desalvo_standard_library {
      {1,6,4,3,2,2,3,1,5,6}
      @endcode
      */
-    file<file_type::input>::file(file&& other) : file_stream(std::move(other.file_stream)), filename(other.filename) {
+    inline file<file_type::input>::file(file&& other) : file_stream(std::move(other.file_stream)), filename(other.filename) {
         if(file_stream.fail()) std::runtime_error{"Error: moving file"};
     }
     
@@ -456,7 +455,7 @@ namespace desalvo_standard_library {
      {1,6,4,3,2,2,3,1,5,6}
      @endcode
      */
-    file<file_type::input>& file<file_type::input>::operator=(file<file_type::input>&& other) {
+    inline file<file_type::input>& file<file_type::input>::operator=(file<file_type::input>&& other) {
         file_stream = std::move(other.file_stream);
         filename = other.filename;
         return *this;
@@ -633,7 +632,7 @@ namespace desalvo_standard_library {
     
     
     
-    void file<file_type::input>::reset() {
+    inline void file<file_type::input>::reset() {
         file_stream.close();
         file_stream.open(filename);
     }
@@ -738,12 +737,12 @@ namespace desalvo_standard_library {
      To the lascivious pleasing of a lute.
      @endcode
      */
-    file<file_type::input>::operator bool() {
+    inline file<file_type::input>::operator bool() {
         return !file_stream.fail();
     }
     
     /** Closes out the stream.  +1 for RAII! */
-    file<file_type::input>::~file() { file_stream.close(); };
+    inline file<file_type::input>::~file() { file_stream.close(); };
     
     
     
@@ -794,7 +793,7 @@ namespace desalvo_standard_library {
      3.1415926535897932384626433832795028841971693993751058209
      @endcode
      */
-    file<file_type::output>::file(std::string filename, std::fstream::openmode additional_modes, size_t output_precision) {
+    inline file<file_type::output>::file(std::string filename, std::fstream::openmode additional_modes, size_t output_precision) {
         
         p = std::fstream::out;
         p |= additional_modes;
@@ -847,7 +846,7 @@ namespace desalvo_standard_library {
      3.141592653589793238462643383279502884197169399375105820974944
      @endcode
      */
-    file<file_type::output>::file(file&& other) : file_stream(std::move(other.file_stream)) {
+    inline file<file_type::output>::file(file&& other) : file_stream(std::move(other.file_stream)) {
         if(file_stream.fail()) std::runtime_error{"Error: moving file"};
     }
     
@@ -903,7 +902,7 @@ namespace desalvo_standard_library {
      2.718281828
      @endcode
      */
-    file<file_type::output>& file<file_type::output>::operator=(file<file_type::output>&& other) {
+    inline file<file_type::output>& file<file_type::output>::operator=(file<file_type::output>&& other) {
         file_stream = std::move(other.file_stream);
         return *this;
     }
@@ -1069,7 +1068,7 @@ namespace desalvo_standard_library {
      3                   12                  4         9987
      @endcode
      */
-    file<file_type::output>& file<file_type::output>::operator<<( manip1 fp ) {
+    inline file<file_type::output>& file<file_type::output>::operator<<( manip1 fp ) {
         file_stream << fp;
         return *this;
     }
@@ -1107,7 +1106,7 @@ namespace desalvo_standard_library {
      3                   12                  4         9987
      @endcode
      */
-    file<file_type::output>& file<file_type::output>::operator<<( manip2 fp ) {
+    inline file<file_type::output>& file<file_type::output>::operator<<( manip2 fp ) {
         file_stream << fp;
         return *this;
     }
@@ -1145,7 +1144,7 @@ namespace desalvo_standard_library {
      3                   12                  4         9987
      @endcode
      */
-    file<file_type::output>& file<file_type::output>::operator<<( manip3 fp ) {
+    inline file<file_type::output>& file<file_type::output>::operator<<( manip3 fp ) {
         file_stream << fp;
         return *this;
     }
@@ -1166,7 +1165,7 @@ namespace desalvo_standard_library {
     
     
     /** Closes out the stream.  +1 for RAII! */
-    file<file_type::output>::~file() { file_stream.close(); };
+    inline file<file_type::output>::~file() { file_stream.close(); };
     
 
 
@@ -1219,7 +1218,7 @@ namespace desalvo_standard_library {
      @endcode
      */
     template<typename String>
-    bool getline(file<file_type::console>& fin, String& s) {
+    inline bool getline(file<file_type::console>& fin, String& s) {
         std::getline( std::cin, s);
         return fin;
     }
@@ -1261,7 +1260,7 @@ namespace desalvo_standard_library {
      3.1415926535897932384626433832795028841971693993751058209
      @endcode
      */
-    file<file_type::console>::file(std::fstream::openmode additional_modes, size_t output_precision) {
+    inline file<file_type::console>::file(std::fstream::openmode additional_modes, size_t output_precision) {
         
         p = std::fstream::out;
         p |= additional_modes;
@@ -1461,7 +1460,7 @@ namespace desalvo_standard_library {
 
     
     /** Makes the file convertable to bool for use in conditional expressions */
-    file<file_type::console>::operator bool() {
+    inline file<file_type::console>::operator bool() {
         return !std::cin.fail();
     }
     
@@ -1830,7 +1829,7 @@ namespace desalvo_standard_library {
      3                   12                  4         9987
      @endcode
      */
-    file<file_type::console>& file<file_type::console>::operator<<( manip1 fp ) {
+    inline file<file_type::console>& file<file_type::console>::operator<<( manip1 fp ) {
         std::cout << fp;
         return *this;
     }
@@ -1839,7 +1838,7 @@ namespace desalvo_standard_library {
      @param fp is an argument which manipulates the underlying file stream
      @returns a reference to the file object for chaining
      */
-    file<file_type::console>& file<file_type::console>::operator<<( manip2 fp ) {
+    inline file<file_type::console>& file<file_type::console>::operator<<( manip2 fp ) {
         std::cout << fp;
         return *this;
     }
@@ -1875,7 +1874,7 @@ namespace desalvo_standard_library {
      3                   12                  4         9987
      @endcode
      */
-    file<file_type::console>& file<file_type::console>::operator<<( manip3 fp ) {
+    inline file<file_type::console>& file<file_type::console>::operator<<( manip3 fp ) {
         std::cout << fp;
         return *this;
     }

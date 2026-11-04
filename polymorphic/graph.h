@@ -283,7 +283,7 @@ namespace desalvo_standard_library {
 
         /** Provides access to the nodes associated with the edge.
             @returns a vector of Node* representing the connection. */
-        std::vector<const Node*> Edge::get_nodes() const { 
+        inline std::vector<const Node*> Edge::get_nodes() const { 
             return nodes;
         }
 
@@ -291,7 +291,7 @@ namespace desalvo_standard_library {
         /** prints the nodes and undirected edge connecting them.
             @param out is a stream object, by default std::cout
         */
-        void UndirectedEdge::print(std::ostream& out) const {
+        inline void UndirectedEdge::print(std::ostream& out) const {
             nodes[0]->print(out);
             out << " ---- ";
             nodes[1]->print(out);
@@ -301,7 +301,7 @@ namespace desalvo_standard_library {
         /** prints the nodes and directed edge connecting them.
             @param out is a stream object, by default std::cout
         */
-        void DirectedEdge::print(std::ostream& out) const {
+        inline void DirectedEdge::print(std::ostream& out) const {
             nodes[0]->print(out);
             out << " ---> ";
             nodes[1]->print(out);
@@ -311,7 +311,7 @@ namespace desalvo_standard_library {
         /** prints the nodes and weighted directed edge connecting them.
             @param out is a stream object, by default std::cout
         */
-        void WeightedDirectedEdge::print(std::ostream& out) const {
+        inline void WeightedDirectedEdge::print(std::ostream& out) const {
             nodes[0]->print(out);
             out << " -- " << weight << " --> ";
             nodes[1]->print(out);
@@ -321,7 +321,7 @@ namespace desalvo_standard_library {
         /** prints the label of the node. 
             @param out is a stream object, by default std::cout
         */
-        void LabelledNode::print(std::ostream& out) const {
+        inline void LabelledNode::print(std::ostream& out) const {
             out << label;
         }
 
@@ -330,7 +330,7 @@ namespace desalvo_standard_library {
             so that none of the derived classes needs to worry about it.  
             @param initial_graph is the Graph object the Node belongs to.
         */
-        Node::Node(Graph* initial_graph) : graph(initial_graph) { 
+        inline Node::Node(Graph* initial_graph) : graph(initial_graph) { 
             graph->add_node(this);
         }
 
@@ -339,7 +339,7 @@ namespace desalvo_standard_library {
             @param initial_graph is a Graph pointer in which the Node belongs to.
             @param initial_edge is an edge which is incident to the node.
         */
-        Node::Node(Graph* initial_graph, Edge* initial_edge) : graph(initial_graph) { 
+        inline Node::Node(Graph* initial_graph, Edge* initial_edge) : graph(initial_graph) { 
             incident_edges.push_back(initial_edge);
             graph->add_node(this);
         }
@@ -349,7 +349,7 @@ namespace desalvo_standard_library {
             @param initial_graph is a Graph pointer in which the Node belongs to.
             @param initial_incident_edges is a vector of edges which are incident to the node.
         */
-        Node::Node(Graph* initial_graph, std::vector<Edge*>& initial_incident_edges) : graph(initial_graph), incident_edges(initial_incident_edges) { 
+        inline Node::Node(Graph* initial_graph, std::vector<Edge*>& initial_incident_edges) : graph(initial_graph), incident_edges(initial_incident_edges) { 
             graph->add_node(this);
         }
 
@@ -359,7 +359,7 @@ namespace desalvo_standard_library {
             @param initial_graph is a Graph pointer in which the Node belongs to.
             @param initial_label is the initial label for the node.
         */
-        LabelledNode::LabelledNode(Graph* initial_graph, std::string initial_label) : Node(initial_graph), label(initial_label) { 
+        inline LabelledNode::LabelledNode(Graph* initial_graph, std::string initial_label) : Node(initial_graph), label(initial_label) { 
             // Node base class and field initializer list takes care of everything
         };
 
@@ -369,7 +369,7 @@ namespace desalvo_standard_library {
             @param initial_edge is an edge which is incident to the node.
             @param initial_label is the initial label for the node.        
         */
-        LabelledNode::LabelledNode(Graph* initial_graph, Edge* initial_edge, const std::string& initial_label) : Node(initial_graph, initial_edge), label(initial_label) { 
+        inline LabelledNode::LabelledNode(Graph* initial_graph, Edge* initial_edge, const std::string& initial_label) : Node(initial_graph, initial_edge), label(initial_label) { 
             // Node base class and field initializer list takes care of everything
         };
 
@@ -379,7 +379,7 @@ namespace desalvo_standard_library {
             @param initial_incident_edges is a vector of edges which are incident to the node.
             @param initial_label is the initial label for the node.
         */
-        LabelledNode::LabelledNode(Graph* initial_graph, std::vector<Edge*>& initial_incident_edges, const std::string& initial_label) : Node(initial_graph, initial_incident_edges), label(initial_label) {
+        inline LabelledNode::LabelledNode(Graph* initial_graph, std::vector<Edge*>& initial_incident_edges, const std::string& initial_label) : Node(initial_graph, initial_incident_edges), label(initial_label) {
             // Node base class and field initializer list takes care of everything
         };
 
@@ -387,7 +387,7 @@ namespace desalvo_standard_library {
             so that none of the derived classes needs to worry about it.
             @param initial_graph is a Graph pointer in which the Edge belongs to.
         */
-        Edge::Edge(Graph* initial_graph) : graph(initial_graph) { 
+        inline Edge::Edge(Graph* initial_graph) : graph(initial_graph) { 
             initial_graph->add_edge(this);
         }
 
@@ -397,7 +397,7 @@ namespace desalvo_standard_library {
             @param initial_first_node is a Node pointer to one of the two nodes.
             @param initial_second_node is a Node pointer to the other of the two nodes.
         */
-        UndirectedEdge::UndirectedEdge(Graph* initial_graph, Node* initial_first_node, Node* initial_second_node) : Edge(initial_graph) { 
+        inline UndirectedEdge::UndirectedEdge(Graph* initial_graph, Node* initial_first_node, Node* initial_second_node) : Edge(initial_graph) { 
             nodes.push_back(initial_first_node);
             nodes.push_back(initial_second_node);
         }
@@ -408,7 +408,7 @@ namespace desalvo_standard_library {
             @param initial_start is a Node pointer to one of the two nodes.
             @param initial_stop is a Node pointer to the other of the two nodes.
         */
-        DirectedEdge::DirectedEdge(Graph* initial_graph, Node* initial_start, Node* initial_stop) : Edge(initial_graph) {
+        inline DirectedEdge::DirectedEdge(Graph* initial_graph, Node* initial_start, Node* initial_stop) : Edge(initial_graph) {
             nodes.push_back(initial_start);
             nodes.push_back(initial_stop);
         }
@@ -421,7 +421,7 @@ namespace desalvo_standard_library {
             @param initial_stop is a Node pointer to the other of the two nodes.
             @param initial_weight is the initial weight for the node.
         */
-        WeightedDirectedEdge::WeightedDirectedEdge(Graph* initial_graph, Node* initial_start, Node* initial_stop, double initial_weight) : DirectedEdge(initial_graph, initial_start, initial_stop), weight(initial_weight) { 
+        inline WeightedDirectedEdge::WeightedDirectedEdge(Graph* initial_graph, Node* initial_start, Node* initial_stop, double initial_weight) : DirectedEdge(initial_graph, initial_start, initial_stop), weight(initial_weight) { 
             // (There is no step 3.)  See field initializer list all the way on the right in the line above.
         }
 
@@ -430,7 +430,7 @@ namespace desalvo_standard_library {
             @param directed indicates whether the edge relations are directed.
             @returns a vector of nodes which are neighbors to state.
         */
-        std::vector<const Node*> Graph::neighbors(const Node* state, bool directed) const {
+        inline std::vector<const Node*> Graph::neighbors(const Node* state, bool directed) const {
             // Only works for graphs, not yet hyper graphs where a hyperedge can connect 3 or more nodes.
 
             // Find all edges which have that node as its starting point.
@@ -454,7 +454,7 @@ namespace desalvo_standard_library {
             @param directed indicates whether the edge relations are directed.
             @returns a vector of nodes which are neighbors to state.
         */
-        std::pair<std::vector<const Node*>, std::vector<double>> Graph::neighbors_and_weights(const Node* state, bool directed) const {
+        inline std::pair<std::vector<const Node*>, std::vector<double>> Graph::neighbors_and_weights(const Node* state, bool directed) const {
             // Only works for graphs, not yet hyper graphs where a hyperedge can connect 3 or more nodes.
 
             std::vector<const Node*> neighbors;
@@ -491,7 +491,7 @@ namespace desalvo_standard_library {
             @param k is the number of nodes.
             @returns a complete graph.
         */
-        Graph complete_graph(unsigned int k) {
+        inline Graph complete_graph(unsigned int k) {
             Graph graph; // = new Graph;
 
             // First initialize nodes so that the edges can be initialized to them.
@@ -635,7 +635,7 @@ namespace desalvo_standard_library {
             @tparam URNG is the standard uniform random number generator type
             @returns a directed graph.
         */
-        Graph graph_from_file(std::string filename) {
+        inline Graph graph_from_file(std::string filename) {
             file< file_type::input > graph_file(filename); //"input/" + "graph.txt");
 
             std::vector<double> weights;

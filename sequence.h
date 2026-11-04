@@ -18,6 +18,7 @@
 #include <string>
 #include <vector>
 #include <thread>
+#include <atomic>
 
 namespace desalvo_standard_library {
     
@@ -188,7 +189,16 @@ namespace desalvo_standard_library {
     template<typename Derived, typename T, typename V>
     class finite_sequence<dsl::store::bidirectional, Derived, T, V> {
         friend std::ostream& operator<<(std::ostream& out, const finite_sequence& seq) {
-            return out << seq.v;
+            // These elements are generated rather than stored, so there is no
+            // container to hand to the stream; walk the sequence instead.
+            out << "{";
+            bool first = true;
+            for (auto it = seq.begin(); it != seq.end(); ++it) {
+                if (!first) out << ",";
+                out << *it;
+                first = false;
+            }
+            return out << "}";
         }
         
     public:
@@ -350,7 +360,16 @@ namespace desalvo_standard_library {
     template<typename Derived, typename T, typename V>
     class finite_sequence<dsl::store::forward, Derived, T, V> {
         friend std::ostream& operator<<(std::ostream& out, const finite_sequence& seq) {
-            return out << seq.v;
+            // These elements are generated rather than stored, so there is no
+            // container to hand to the stream; walk the sequence instead.
+            out << "{";
+            bool first = true;
+            for (auto it = seq.begin(); it != seq.end(); ++it) {
+                if (!first) out << ",";
+                out << *it;
+                first = false;
+            }
+            return out << "}";
         }
         
     public:
@@ -501,7 +520,16 @@ namespace desalvo_standard_library {
     template<typename Derived, typename T, typename V>
     class finite_sequence_threadable<dsl::store::forward, Derived, T, V> {
         friend std::ostream& operator<<(std::ostream& out, const finite_sequence_threadable& seq) {
-            return out << seq.v;
+            // These elements are generated rather than stored, so there is no
+            // container to hand to the stream; walk the sequence instead.
+            out << "{";
+            bool first = true;
+            for (auto it = seq.begin(); it != seq.end(); ++it) {
+                if (!first) out << ",";
+                out << *it;
+                first = false;
+            }
+            return out << "}";
         }
         
     public:

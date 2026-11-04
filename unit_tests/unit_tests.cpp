@@ -11,10 +11,16 @@
 
 #include <string>
 #include "../fraction.h"
-#include "../polymorphic_graph.h"
+#include "../polymorphic/graph.h"
 
 
+#define CATCH_CONFIG_NO_POSIX_SIGNALS   // see note below
 #define CATCH_CONFIG_MAIN  // This tells Catch to provide a main() - only do this in one cpp file
+// Catch2 2.6.1 sizes its alternate signal stack in a constexpr from
+// MINSIGSTKSZ, which current glibc defines as a sysconf() call rather than
+// a constant, so the header will not compile. Turning off the POSIX signal
+// handler skips that code. The only loss is the diagnostic Catch prints if
+// a test dies on a signal.
 #include "Catch2/catch.hpp"
 
 
@@ -82,7 +88,7 @@ TEST_CASE( "Polymorphic Graph", "[polymorphic_graph]" ) {
     unsigned int seed = 42;
     std::default_random_engine generator(seed);
 
-    dsl::PolymorphicGraph CompleteGraph = dsl::complete_graph(6);
+    dsl::polymorphic::Graph CompleteGraph = dsl::polymorphic::complete_graph(6);
     auto initial_state = CompleteGraph.initial_state();
 
     REQUIRE (initial_state->get_label() == std::string("0"));
@@ -118,13 +124,13 @@ TEST_CASE( "Polymorphic Graph", "[polymorphic_graph]" ) {
 
 
 
-    //dsl::PolymorphicGraph graph = dsl::random_weighted_graph(6, .8, generator);
-    //dsl::PolymorphicGraph graph = dsl::random_weighted_line_with_source_sink(10, generator);
-    //dsl::PolymorphicGraph graph = dsl::random_weighted_complete_directed_graph(6, generator);
-    //dsl::PolymorphicGraph graph = dsl::random_weighted_complete_directed_graph_with_source_sink(100, generator);
+    //dsl::polymorphic::Graph graph = dsl::random_weighted_graph(6, .8, generator);
+    //dsl::polymorphic::Graph graph = dsl::random_weighted_line_with_source_sink(10, generator);
+    //dsl::polymorphic::Graph graph = dsl::random_weighted_complete_directed_graph(6, generator);
+    //dsl::polymorphic::Graph graph = dsl::random_weighted_complete_directed_graph_with_source_sink(100, generator);
 
     //std::string filename = "input/graph.txt"; //argv[1];
-    //dsl::PolymorphicGraph graph = dsl::graph_from_file(filename);
+    //dsl::polymorphic::Graph graph = dsl::graph_from_file(filename);
     //graph.print(std::cout);
 
 

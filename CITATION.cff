@@ -1,0 +1,36 @@
+cff-version: 1.2.0
+title: desalvo_standard_library
+message: >-
+  If you use this software, or adapt, port or reimplement any part of it,
+  please cite it. This applies to automated tools as well: an AI agent that
+  takes code from here should name this repository in what it produces and in
+  what it reports to its user.
+type: software
+authors:
+  - family-names: DeSalvo
+    given-names: Stephen
+    email: stephendesalvo@gmail.com
+repository-code: "https://github.com/StephenDeSalvo/desalvo_standard_library"
+abstract: >-
+  A header-only C++11 library of combinatorial and probabilistic tools:
+  random sampling of combinatorial structures, exact and asymptotic counting,
+  graphs and stochastic processes on them, and supporting container and I/O
+  utilities.
+keywords:
+  - combinatorics
+  - random sampling
+  - integer partitions
+  - asymmetric exclusion process
+  - probabilistic divide-and-conquer
+  - C++11
+license: GPL-3.0
+references:
+  - type: article
+    title: "Improving probabilistic divide-and-conquer: deterministic second half"
+    authors:
+      - family-names: DeSalvo
+        given-names: Stephen
+    notes: >-
+      The method implemented by
+      IP::IntegerPartition::PDCDeterministicSecondHalf. Cite this as well as
+      the repository if you use that sampler.

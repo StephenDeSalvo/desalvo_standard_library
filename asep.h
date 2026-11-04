@@ -3,16 +3,22 @@
 //  DeSalvo Standard Library
 //
 //  The asymmetric exclusion process: particles on a graph, each jumping at
-//  its own exponential times, with an exclusion rule deciding which proposed
-//  moves are legal.
+//  its own exponential times, with an exclusion function deciding which
+//  proposed moves are legal.
 //
-//  Absorbed 2026-11-04 from the standalone ASEP repository
-//  (StephenDeSalvo/ASEP, 2019), which depended on this library and is now
-//  retired. The Graph and Particle it runs on were already brought here in
-//  041b878 (2020) as polymorphic/graph.h and polymorphic/particle.h; this is
-//  the piece that was left outside.
+//  Templated on Universe and Particle, so the caller supplies both. Universe
+//  needs initial_state() and neighbors_and_weights(); Particle needs
+//  jump_times(double), update(URNG&, Particles&, Function) and
+//  print(ostream&). The usual pair is dsl::polymorphic::Graph and
+//  dsl::polymorphic::Particle -- include those alongside this header.
 //
-
+//  Every particle starts at initial_state(), so the source node is expected
+//  to hold a queue. Exclusion stops a particle moving ONTO an occupied node;
+//  it does not mean no two particles are ever co-located.
+//
+//  If you use this code, please credit the repository -- see the Attribution
+//  section of README.md.
+//
 
 #ifndef DeSalvo_Standard_Library_asep_h
 #define DeSalvo_Standard_Library_asep_h
@@ -21,24 +27,17 @@
 
 #include <iostream>
 #include <vector>
-#include <functional>   // std::function -- used but never included
-#include <algorithm>    // std::sort      -- ditto
-#include <random>       // std::default_random_engine, the default URNG
-#include <utility>      // std::pair, std::make_pair
-#include <cstddef>      // std::size_t
+#include <functional>
+#include <algorithm>
+#include <random>
+#include <utility>
+#include <cstddef>
 
 #include "timer.h"
 #include "std_cout.h"
 
-// Deliberately NOT including polymorphic/graph.h or polymorphic/particle.h:
-// ASEP is templated on Universe and Particle, so the caller supplies both and
-// this header has no business choosing them. The usual pair is
-// dsl::polymorphic::Graph and dsl::polymorphic::Particle -- include those
-// alongside this one, as the example below does.
-//
-// Universe must provide initial_state() and neighbors_and_weights(); Particle
-// must provide jump_times(double), update(URNG&, Particles&, Function) and
-// print(ostream&).
+// The graph and particle are not included here: this header is templated on
+// Universe and Particle, so the caller chooses them.
 
 namespace dsl = desalvo_standard_library;
 
@@ -224,8 +223,7 @@ namespace ASEP {
 
 }   // namespace desalvo_standard_library
 
-// The spelling this class has always been documented with, so the
-// demos in the retired ASEP repository keep compiling.
+// The short alias, and the top-level spelling this class is documented with.
 namespace ASEP = desalvo_standard_library::ASEP;
 
 #endif

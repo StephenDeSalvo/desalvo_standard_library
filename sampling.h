@@ -10,6 +10,7 @@
 #define DeSalvo_Standard_Library_sampling_h
 
 #include <tuple>
+#include <cstddef>
 
 namespace desalvo_standard_library {
     
@@ -17,7 +18,9 @@ namespace desalvo_standard_library {
     class sequence_parameters {
     public:
         sequence_parameters(T1 t, Args... args) {
-            parameters = std::make_tuple<T1,Args...>(t,args...);
+            // let make_tuple deduce: naming the arguments explicitly makes them
+            // rvalue references, which cannot bind to these lvalue parameters
+            parameters = std::make_tuple(t, args...);
         }
         
         sequence_parameters() { }
@@ -31,8 +34,18 @@ namespace desalvo_standard_library {
             parameters = params;
         }
         
-        template<typename T>
-        T get(const size_t index) { return std::get<index>(parameters); };
+        /** Returns the index-th parameter.
+            @tparam index is the position in the parameter list.
+
+            index is a template parameter because a tuple is indexed at
+            compile time; there is no runtime tuple lookup to call. */
+        template<std::size_t index>
+        typename std::tuple_element<index, std::tuple<T1, Args...> >::type&
+        get() { return std::get<index>(parameters); };
+
+        template<std::size_t index>
+        const typename std::tuple_element<index, std::tuple<T1, Args...> >::type&
+        get() const { return std::get<index>(parameters); };
 
     private:
         std::tuple<T1,Args...> parameters;

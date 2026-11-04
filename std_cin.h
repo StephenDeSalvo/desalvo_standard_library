@@ -35,7 +35,7 @@ std::string cout_open_bracket = "{";
 std::string cout_close_bracket = "}";
 std::string no_ending = "";
 */
-char unused;
+static char unused;
 
     template<typename T, typename F>
     std::istream& operator>>(std::istream& in, std::pair<T,F>& vec);

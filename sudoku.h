@@ -620,7 +620,7 @@ namespace desalvo_standard_library {
         max_mult = 0; // = start->get_multiplicity();
         //ull min_mult = INT_MAX;
         
-        while(getline(rejections, line) ) {
+        inline while(getline(rejections, line) ) {
             //        lookup.push_back( ds::sudoku<short>::RejectionLookup(line) );
             lookup[i] = ( sudoku<IntType>::RejectionLookup(line) );
             max_mult = std::max( max_mult, lookup[i].get_multiplicity());
@@ -788,7 +788,7 @@ namespace desalvo_standard_library {
         max_mult = 0; // = start->get_multiplicity();
         //ull min_mult = INT_MAX;
         
-        while(getline(rows, line) ) {
+        inline while(getline(rows, line) ) {
             //        lookup.push_back( ds::sudoku<short>::RejectionLookup(line) );
             lookup[i] = ( sudoku<IntType>::RejectionLookup(line) );
             max_mult = std::max( max_mult, lookup[i].get_multiplicity());

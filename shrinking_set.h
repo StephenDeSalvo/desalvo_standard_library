@@ -747,7 +747,7 @@ namespace desalvo_standard_library {
          {2,1,3}
          @endcode
         */
-        void reset(bool flag = false){
+        inline void reset(bool flag = false){
             
             // Simply reassign stop to the end of the continer
             stop = std::end(elements);
@@ -1979,7 +1979,7 @@ namespace desalvo_standard_library {
          {1,2,3}
          @endcode
          */
-        void reset(){
+        inline void reset(){
             stop = std::end(elements);
             std::sort(start, stop, less);
         };

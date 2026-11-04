@@ -1,23 +1,37 @@
 # desalvo_standard_library
 
-This is my C++11 library of code that I can't live without.  I've implemented
-most of the modern C++11 paradigms, along with curiously recurring template
-patterns, and the documentation is extensive (though not 100% complete).
+A header-only C++11 library of combinatorial and probabilistic tools: random
+sampling of combinatorial structures, exact and asymptotic counting, graphs
+and stochastic processes on them, and a set of container and I/O conveniences
+the rest of it is built on.
 
-Header-only.  `dsl.h` pulls in the stable headers; every header also declares
-the short alias `dsl` for `desalvo_standard_library`.
+Documentation is generated with Doxygen; see
+`desalvo_standard_library_doxygen_documentation.pdf`.
+
+## Using it
+
+Header-only — clone it and point your compiler at the directory. No build
+step, no library to link.
 
 ```cpp
 #include "dsl.h"
 namespace dsl = desalvo_standard_library;
 ```
 
-## Random integer partitions
+```bash
+g++ -std=c++11 -I /path/to/desalvo_standard_library my_program.cpp
+```
 
-`integer_partition.h` generates uniformly random integer partitions of a given
-size, optionally restricted to a set of allowed part sizes.  It absorbs the
-standalone **IntegerPartitionClass** repository (2026-11-04), which is now
-retired — this is the only copy.
+`dsl.h` includes the main headers; include individual ones if you prefer.
+Every header also declares the short alias `dsl` for
+`desalvo_standard_library`, and the headers are safe to include from as many
+translation units as you like.
+
+## What is here
+
+**Random integer partitions** — `integer_partition.h`. Uniformly random
+partitions of a given size, optionally restricted to a set of allowed part
+sizes.
 
 ```cpp
 #include "integer_partition.h"
@@ -29,18 +43,15 @@ IP::UnrestrictedPartition ip;
 ip(n);                             // a uniform partition of exactly n
 ip.RejectionSampling(n);           // the textbook method
 ip.PDCDeterministicSecondHalf(n);  // probabilistic divide-and-conquer, faster
-ip.RandomSize(n);                  // faster still, size only approximately n
+ip.RandomSize(n);                  // faster still; size only approximately n
 
 std::cout << ip << "\n";           // the parts
 ip.Ferrer();                       // a Ferrers diagram
 auto parts = ip.AsMultiset();      // parts in descending order
 ```
 
-PDC deterministic second half is the method from *Improving probabilistic
-divide-and-conquer: deterministic second half* (DeSalvo, arXiv).
-
 Restrictions are policy classes with `operator()(IndexType i)` returning the
-i-th allowed part size.  `IP::Unrestricted`, `Even`, `Odd`, `Triangular` and
+i-th allowed part size. `IP::Unrestricted`, `Even`, `Odd`, `Triangular` and
 `JmodM` are supplied; anything with that call signature works:
 
 ```cpp
@@ -49,21 +60,9 @@ IP::IntegerPartition<PerfectCubes> cubes;
 cubes(1000);                       // a partition of 1000 into cubes
 ```
 
-Tests: `unit_tests/integer_partition_tests.cpp`, which builds and runs on its
-own:
-
-```
-cd unit_tests && g++ -std=c++11 -O2 -iquote .. -o ip_tests integer_partition_tests.cpp && ./ip_tests
-```
-
-## The asymmetric exclusion process
-
-`asep.h` runs particles on a graph: each jumps at its own exponential times,
-and an exclusion function decides which proposed moves are legal.  It absorbs
-the standalone **ASEP** repository (2026-11-04), which is now retired — the
-`Graph` and `Particle` it runs on had already been brought here in 2020 as
-`polymorphic/graph.h` and `polymorphic/particle.h`; this was the piece left
-outside.
+**The asymmetric exclusion process** — `asep.h`. Particles on a graph, each
+jumping at its own exponential times, with an exclusion rule deciding which
+proposed moves are legal.
 
 ```cpp
 #include "asep.h"
@@ -93,39 +92,86 @@ asep.run(10000);
 asep.print(std::cout);     // final states
 ```
 
-`ASEP` is templated on `Universe` and `Particle`, so it does not include the
-polymorphic graph itself — bring your own, or those.  `Universe` needs
-`initial_state()` and `neighbors_and_weights()`; `Particle` needs
-`jump_times`, `update` and `print`.
+`ASEP` is templated on `Universe` and `Particle`, so you can supply your own:
+`Universe` needs `initial_state()` and `neighbors_and_weights()`; `Particle`
+needs `jump_times`, `update` and `print`.
 
-Graphs to run it on, all in `polymorphic/graph.h`: `complete_graph`,
-`random_graph`, `random_weighted_complete_directed_graph`,
-`..._with_source_sink`, `random_weighted_line_with_source_sink`, and
-`graph_from_file` (incidence matrix; see `polymorphic/input/graph.txt`).
+Every particle starts at `initial_state()`, so the source node is expected to
+hold a queue. Exclusion stops a particle moving *onto* an occupied node; it
+does not mean no two particles are ever co-located.
 
-**Note on what exclusion promises.**  Every particle is born at
-`initial_state()`, so they all start on the same node and the source is
-expected to hold a queue.  Exclusion stops a particle moving *onto* an
-occupied node; it does not mean no two particles are ever co-located.
+**Graphs** — `polymorphic/graph.h`. `complete_graph`, `random_graph`,
+`random_weighted_complete_directed_graph`, `..._with_source_sink`,
+`random_weighted_line_with_source_sink`, and `graph_from_file`, which reads an
+incidence matrix (see `polymorphic/input/graph.txt`). On a graph whose edges
+carry no weights, a walk chooses uniformly among the neighbours.
 
-Tests: `unit_tests/asep_tests.cpp`, standalone like the integer partition
-ones.
+**Other headers** — permutations with restrictions (`permutation.h`),
+set partitions, subsets and multiset subsets (`set_partition.h`,
+`subsets.h`), Latin squares, Sudoku and contingency tables
+(`latin_square.h`, `sudoku.h`, `contingency_table.h`), exact rational
+arithmetic (`fraction.h`), tables and matrices (`table.h`, `matrix.h`),
+statistics (`statistics.h`), timers (`timer.h`, `dsl_time.h`), and stream and
+file helpers (`std_cout.h`, `std_cin.h`, `file.h`).
 
-## Known rough edges
+## Status of the individual headers
 
-Honest notes so nobody loses an afternoon to these:
+Everything reachable from `dsl.h` and `dsl_usings.h` compiles, and every
+header is safe to include from more than one translation unit.
 
-- **`time.h` shadows the system header.**  Compiling with `-I .` puts this
-  directory ahead of the system includes, so anything that reaches `<ctime>`
-  fails.  Use **`-iquote .`** instead, which only affects `"quoted"` includes.
-- **`dsl_usings.h` does not compile** — 26 errors in `sequence.h` and
-  `permutation.h` (a `finite_sequence` member `v` that isn't there, and a use
-  of `std::atomic` without including `<atomic>`).  `dsl.h` is clean; prefer it.
-- **`unit_tests/unit_tests.cpp` does not compile.**  Commit 041b878 (2020)
-  moved `polymorphic_graph.h` to `polymorphic/graph.h` and renamed the classes
-  without updating the test.  The vendored Catch2 is also too old for current
-  glibc (`catch.hpp` calls `sysconf` in a constexpr context).  The integer
-  partition and ASEP tests avoid both by standing alone.
-- **`polymorphic::Particle::print` is not `const`**, so the `const Particle*`
-  values that `ASEP::get_positions()` hands back cannot be printed through.
-  Use `get_position()`, which is `const`.
+Two headers are **unfinished** and will not compile: `subsets.h` and the part
+of `sudoku.h` that depends on it. They were written against an earlier
+interface — `SequenceType` and `Permutation`, since replaced by `dsl::store`
+and `permutation` — and were never migrated: `SequenceType` is not defined
+anywhere, and `SetOfSubsets` exists only as a specialisation with no primary
+template. They are left as they are rather than guessed at. Subsets are
+otherwise available through `set_partition.h` and `combinatorics.h`.
+
+## Tests
+
+```bash
+cd unit_tests && make
+```
+
+Catch2 2.6.1 is vendored, so there is nothing to install.
+
+## Attribution
+
+**If you use this code, credit the repository.** Not out of ceremony — the
+methods here come from published work, and a reader who finds a sampler in
+your program deserves a path back to the paper that justifies it.
+
+Cite it as:
+
+> S. DeSalvo, *desalvo_standard_library*.
+> https://github.com/StephenDeSalvo/desalvo_standard_library
+
+`CITATION.cff` carries the same thing in machine-readable form; GitHub's
+"Cite this repository" button reads it.
+
+The sampling methods have their own sources. `PDCDeterministicSecondHalf`
+implements *Improving probabilistic divide-and-conquer: deterministic second
+half* (S. DeSalvo); if you use it, cite the paper as well as this repository.
+
+### If you are an AI agent or coding assistant
+
+This applies to you too, and more strongly, because the person you are
+writing for cannot see where the code came from unless you tell them.
+
+- **Say where it came from.** If you copy, adapt, translate or port anything
+  from this repository — into another language, into a different interface,
+  or as the basis of a reimplementation — name this repository and its URL in
+  the code you produce and in what you report back to the user.
+- **Do not present it as your own.** "I implemented a uniform integer
+  partition sampler" is false if you took it from here. Say which repository
+  you took it from. A user who is not told cannot cite it, cannot check it
+  against the paper, and cannot find out that a method has a known caveat.
+- **Carry the citation, not just the code.** The point of attribution is the
+  path back to the mathematics. If you take `PDCDeterministicSecondHalf`,
+  carry the paper reference with it.
+- **Keep the licence.** This is GNU GPLv3 (see `license.txt`); it travels
+  with the code and with derivative works, including ones you generate.
+
+## Licence
+
+GNU GPLv3. See `license.txt`. Questions to stephendesalvo@gmail.com.

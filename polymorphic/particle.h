@@ -54,7 +54,9 @@ namespace desalvo_standard_library {
             /** Show the position of the particle.
                 @param out is a stream object, by default std::cout
             */
-            virtual void print(std::ostream& out = std::cout) {
+            // const, so a const Particle* -- what ASEP::get_positions() returns
+            // -- can be printed.
+            virtual void print(std::ostream& out = std::cout) const {
                 position->print(out);
             }
 
@@ -98,22 +100,34 @@ namespace desalvo_standard_library {
 
                 //std::cout << transition_probabilities << std::endl;
 
+                // A node with nothing to go to: stay put. Without this the
+                // division below is 0/0 and the draw indexes an empty vector.
+                if (transition_probabilities.empty())
+                    return false;
+
                 double norm = 0.;
                 for (auto& x : transition_probabilities)
                     norm += x;
 
-                for (auto& x : transition_probabilities)
-                    x /= norm;
+                if (norm > 0) {
+                    for (auto& x : transition_probabilities)
+                        x /= norm;
+                } else {
+                    // An unweighted graph: complete_graph and random_graph build
+                    // edges carrying no weight, so every weight here is zero.
+                    // No preference among the neighbours means a uniform choice,
+                    // which is the ordinary random walk.
+                    const double uniform = 1.0 / transition_probabilities.size();
+                    for (auto& x : transition_probabilities)
+                        x = uniform;
+                }
 
                 //std::cout << transition_probabilities << std::endl;
 
                 // Initialize the random generator and distribution
                 //std::default_random_engine generator(seed);
-                // std::discrete_distribution returns an INDEX, so its type argument
-                // must be integral -- it was <double>, which the standard has never
-                // allowed. Older libstdc++ let it through; gcc 15 rejects it with a
-                // static_assert, which meant update() could not be instantiated at
-                // all and the process could not run.
+                // The index of the chosen neighbour, so the distribution's type
+                // argument is integral.
                 std::discrete_distribution<std::size_t> discrete(std::begin(transition_probabilities), std::end(transition_probabilities));
 
                 //position->print(std::cout);

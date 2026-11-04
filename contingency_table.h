@@ -17,14 +17,14 @@
 #include "statistics.h"
 #include "numerical_table.h"
 #include "numerical.h"
-#include "time.h"
+#include "dsl_time.h"
 #include "file.h"
 #include "sequence.h"
 
 namespace desalvo_standard_library {
     
     
-    int level = 0;
+    static int level = 0;
     
     // See documentation.h
     template<typename EntryType=int, typename SumType=EntryType, typename Vector = std::vector<SumType>, typename Table = numerical_table<EntryType,SumType>>

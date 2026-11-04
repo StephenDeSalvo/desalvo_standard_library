@@ -14,6 +14,6 @@
 #include "std_cout.h"
 #include "statistics.h"
 #include "shrinking_set.h"
-#include "time.h"
+#include "dsl_time.h"
 
 #endif

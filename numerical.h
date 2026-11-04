@@ -2921,7 +2921,7 @@ namespace desalvo_standard_library {
      {{1,1,1},{1,1,2},{1,1,3},{1,2,1},{1,2,2},{1,2,3},{1,3,1},{1,3,2},{1,3,3},{2,1,1},{2,1,2},{2,1,3},{2,2,1},{2,2,2},{2,2,3},{2,3,1},{2,3,2},{2,3,3},{3,1,1},{3,1,2},{3,1,3},{3,2,1},{3,2,2},{3,2,3},{3,3,1},{3,3,2},{3,3,3}}
      @endcode
     */
-    std::vector< std::vector<short> > multiset_subsets(short n, short k) {
+    inline std::vector< std::vector<short> > multiset_subsets(short n, short k) {
         
         std::vector< std::vector<short> > sets;
         
@@ -2998,7 +2998,7 @@ namespace desalvo_standard_library {
      {{1,1,1},{1,1,2},{1,1,3},{1,2,2},{1,2,3},{1,3,3},{2,2,2},{2,2,3},{2,3,3},{3,3,3}}
      @endcode
      */
-    std::vector< std::vector<short> > unique_multiset_subsets(short n, short k) {
+    inline std::vector< std::vector<short> > unique_multiset_subsets(short n, short k) {
         
         auto x = multiset_subsets(n,k);
         
@@ -3018,7 +3018,7 @@ namespace desalvo_standard_library {
     /** Take a vector of vectors, and ... I don't remember
      
     */
-    size_t two_by_two_map(const std::vector<short>& v, const std::vector<std::vector<short>>& possibles) {
+    inline size_t two_by_two_map(const std::vector<short>& v, const std::vector<std::vector<short>>& possibles) {
         
         //auto x = std::find( std::begin(possibles), std::end(possibles), v );
         auto x = binary_search_iterator( std::begin(possibles), std::end(possibles), v );
@@ -3028,7 +3028,7 @@ namespace desalvo_standard_library {
     
     
     // Assume possibilities is sorted!
-    size_t two_by_two_map(const std::vector<short>& v, const std::vector<std::pair<std::vector<short>, double>>& possibles) {
+    inline size_t two_by_two_map(const std::vector<short>& v, const std::vector<std::pair<std::vector<short>, double>>& possibles) {
         
         //auto x = std::find( std::begin(possibles), std::end(possibles), v );
         auto x = binary_search_iterator_first( std::begin(possibles), std::end(possibles), v );
@@ -3058,7 +3058,7 @@ namespace desalvo_standard_library {
      {1,2,4,7,8,11,13,14,16,17,19,22,23,3,6,9,12,18,21,24,5,10,20,25,15}
      @endcode
     */
-    std::vector<unsigned int> fizz_buzz_partition(size_t n) {
+    inline std::vector<unsigned int> fizz_buzz_partition(size_t n) {
         
         // already fizz-buzz-ed for n <=3
         if(n <=3 ) return range<unsigned int>(3);
@@ -3238,7 +3238,7 @@ namespace desalvo_standard_library {
      
      @endcode
      */
-    std::vector<size_t> permutation_reduction(std::vector<size_t> vals ) {
+    inline std::vector<size_t> permutation_reduction(std::vector<size_t> vals ) {
         
         // stores mapping to find elements again after sorting them
         std::unordered_map<size_t, size_t> rank_to_value;
