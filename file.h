@@ -13,6 +13,14 @@
 
 #include <iostream>
 #include <fstream>
+
+// read(T&) streams into T, and for T = std::vector<U> the operator>> it
+// needs is declared at global scope in std_cin.h. std::vector's associated
+// namespace is std, so ADL will not find it at instantiation; it has to be
+// visible here, where the template is defined. Without this include,
+// whether file.h compiled depended on what the translation unit happened
+// to include first.
+#include "std_cin.h"
 #include <iomanip>
 #include <cstdio>
 #include <string>

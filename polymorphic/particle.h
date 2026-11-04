@@ -109,7 +109,12 @@ namespace desalvo_standard_library {
 
                 // Initialize the random generator and distribution
                 //std::default_random_engine generator(seed);
-                std::discrete_distribution<double> discrete(std::begin(transition_probabilities), std::end(transition_probabilities));
+                // std::discrete_distribution returns an INDEX, so its type argument
+                // must be integral -- it was <double>, which the standard has never
+                // allowed. Older libstdc++ let it through; gcc 15 rejects it with a
+                // static_assert, which meant update() could not be instantiated at
+                // all and the process could not run.
+                std::discrete_distribution<std::size_t> discrete(std::begin(transition_probabilities), std::end(transition_probabilities));
 
                 //position->print(std::cout);
 

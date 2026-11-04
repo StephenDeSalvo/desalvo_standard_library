@@ -10,6 +10,7 @@
 #include "file.h"
 #include "numerical.h"
 #include "integer_partition.h"
+#include "asep.h"
 #include "std_cout.h"
 #include "statistics.h"
 #include "shrinking_set.h"

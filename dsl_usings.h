@@ -20,6 +20,7 @@ TODO: example of
 #include "file.h"           // 
 #include "numerical.h"
 #include "integer_partition.h"
+#include "asep.h"
 #include "dsl_algorithm.h" // apply algorithm to an entire container, just a wrapper.
 #include "statistics.h"
 #include "shrinking_set.h"
